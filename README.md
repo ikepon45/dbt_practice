@@ -84,7 +84,8 @@ dbt docs serve
 ①pip install dbt-osmosis  
 ②dbt_project.ymlのメタデータを作成したいデータセットに下記を追加  
 `+dbt-osmosis: "{model}.yml"`  
-③「dbt-osmosis yaml refactor -f stg_test」を実行するとstg_testデータセット下のモデルのメタデータが作成される  
+③下記を実行するとstg_testデータセット下のモデルのメタデータが作成される  
+`dbt-osmosis yaml refactor -f stg_test`  
 
 ## elementaryの導入方法
 ①packages.ymlを作成し、下記を記載する

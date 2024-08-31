@@ -4,7 +4,7 @@
 ## dbt coreの導入方法
 ①pythonをインストール  
 ②「pip install dbt-bigquery」を実行する
-　「dbt --version」でインストールできたか確認する。
+　「dbt --version」でインストールできたか確認する。  
 ③gcloudをインストール  
 ④bigqueryにクエリを発行するアカウントでログイン  
 gcloud auth application-default login  

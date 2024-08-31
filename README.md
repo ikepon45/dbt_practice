@@ -125,3 +125,16 @@ elementary:
 ⑧「dbt test」を実行する  
 ⑨「edr report」を実行して、test結果を可視化する 
 
+## dbt-coverageの導入方法
+参考：https://zenn.dev/daisuke_harato/articles/3b5a90e0592075  
+①`pip3 install dbt-coverage`を実行する  
+②`dbt docs generate`を実行する  
+③`mkdir coverage`を実行する  
+④下記を実行して、descriptionを設定しているカラムの割合を算出する  
+```
+dbt-coverage compute doc --cov-report coverage/coverage-doc.json
+```
+⑤下記を実行して、テストを設定しているカラムの割合を算出する  
+```
+dbt-coverage compute test --cov-report coverage/coverage-test.json
+```

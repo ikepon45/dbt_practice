@@ -88,6 +88,7 @@ dbt docs serve
 `dbt-osmosis yaml refactor -f stg_test`  
 
 ## elementaryの導入方法
+参考：https://zenn.dev/hananah/articles/566a351ea46f30  
 ①packages.ymlを作成し、下記を記載する
 ```
 packages:
@@ -122,4 +123,5 @@ elementary:
       threads: 1
 ```
 ⑧「dbt test」を実行する  
-⑨「edr report」を実行して、test結果を可視化する  
+⑨「edr report」を実行して、test結果を可視化する 
+

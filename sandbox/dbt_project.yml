@@ -35,3 +35,4 @@ models:
     stg_test:
       +schema: 'stg_test'
       +materialized: 'table'
+      +dbt-osmosis: "{model}.yml"

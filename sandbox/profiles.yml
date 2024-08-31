@@ -11,3 +11,11 @@ sandbox:
       threads: 1
       type: bigquery
   target: dev
+elementary:
+  outputs:
+    default:
+      type: "bigquery"
+      project: "udemy-sql-381210"
+      dataset: "elementary"
+      method: oauth
+      threads: 1

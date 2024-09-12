@@ -17,3 +17,37 @@ models:
       - name: sex
         description: '性別'
         data_type: STRING
+
+unit_tests:
+  - name: test_stg_test_table
+    description: "data logic check"
+    model: stg_test_table
+    given:
+      - input: source('raw_test', 'test_table')
+        rows:
+          - {
+              id: 1,
+              name: "池田",
+              age: 26,
+              sex: man,
+            }
+          - {
+              id: 2,
+              name: "山田",
+              age: 23,
+              sex: woman,
+            }
+    expect:
+      rows:
+        - {
+            id: 1,
+            name: "池田",
+            age: 26,
+            sex: man,
+          }
+        - {
+            id: 2,
+            name: "山田",
+            age: 23,
+            sex: woman,
+          }

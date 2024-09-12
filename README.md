@@ -138,3 +138,6 @@ dbt-coverage compute doc --cov-report coverage/coverage-doc.json
 ```
 dbt-coverage compute test --cov-report coverage/coverage-test.json
 ```
+
+## Unit testsの導入方法
+参考：https://dev.classmethod.jp/articles/dbt-try-unit-tests/

@@ -36,6 +36,8 @@ models:
       +schema: 'stg_test'
       +materialized: 'table'
       +dbt-osmosis: "{model}.yml"
+      +labels:
+        billing: 'test'
   elementary:
     ## elementary models will be created in the schema '<your_schema>_elementary'
     +schema: "elementary"

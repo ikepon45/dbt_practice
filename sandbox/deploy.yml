@@ -1,0 +1,6 @@
+jobs:
+ - name: daily
+   schedule: 0 12 * * *
+   steps:
+     - name: build models
+       command: dbt build

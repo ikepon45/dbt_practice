@@ -2,5 +2,7 @@ jobs:
  - name: daily
    schedule: 5 * * * *
    steps:
-     - name: build models
+    - name: build models
        command: dbt build
+    - name: publish elementary_report
+       command: gsutil -m cp -r edr_target/* gs://dbt_documents_shingo_ikeda/elementary_report/

@@ -72,12 +72,8 @@ jobs:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Authenticate to GAR
-        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
       - name: confirm gcp
         run: gcloud info
-      - name: confirm list
-        run: gcloud compute instances list
 
       - name: build Docker image to GAR
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest .

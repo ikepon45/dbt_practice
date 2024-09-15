@@ -1,4 +1,3 @@
-gcloud auth list
 # パッケージ間の依存関係を整理
 dbt deps
 
@@ -10,6 +9,9 @@ dbt docs generate
 
 # テスト結果のレポートを作成
 edr report
+
+# サービスアカウントでGoogle Cloudにログイン
+gcloud auth login github-actions@udemy-sql-381210.iam.gserviceaccount.com
 
 # GCSバケットにデプロイ
 gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/

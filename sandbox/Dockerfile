@@ -32,4 +32,4 @@ ENV DBT_PROFILES_DIR="/app"
 RUN chmod +x /app/entrypoint.sh
 
 # コンテナ起動時にデフォルトで実行されるコマンド
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT /app/entrypoint.sh

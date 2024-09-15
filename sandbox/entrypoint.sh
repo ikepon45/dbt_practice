@@ -10,6 +10,10 @@ dbt docs generate
 # テスト結果のレポートを作成
 edr report
 
+ls -a
+
+cat service-account-key.json
+
 # サービスアカウントでGoogle Cloudにログイン
 gcloud auth activate-service-account github-actions@udemy-sql-381210.iam.gserviceaccount.com --key-file=service-account-key.json
 

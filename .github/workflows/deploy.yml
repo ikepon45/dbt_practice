@@ -26,6 +26,9 @@ jobs:
       - name: list
         run: ls -a
 
+      - name: cat
+        run: cat service-account-key.json
+
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:

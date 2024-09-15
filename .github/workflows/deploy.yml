@@ -52,6 +52,13 @@ on:
     branches:
       - main
 
+name: deploy dbt
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   deploy-dbt:
     runs-on: ubuntu-latest
@@ -61,6 +68,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: auth Google Cloud
+        uses: google-github-actions/auth@v2
+        with: 
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -68,16 +79,12 @@ jobs:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: auth Google Cloud
-        uses: google-github-actions/auth@v2
-        with: 
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-
       - name: Authenticate to GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
-
       - name: confirm gcp
         run: gcloud info
+      - name: confirm list
+        run: gcloud compute instances list
 
       - name: build Docker image to GAR
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest .

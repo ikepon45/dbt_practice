@@ -23,7 +23,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Authenticate to GAR
-        run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
+        run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev -q
 
       - name: build Docker image to GAR
         run: docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest .

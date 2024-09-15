@@ -21,6 +21,8 @@ jobs:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      - name: Print all environment variables
+        run: printenv
 
       - name: Authenticate to GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q

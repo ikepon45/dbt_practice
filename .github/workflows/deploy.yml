@@ -21,7 +21,7 @@ jobs:
           credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Authenticate with Google Cloud
-        run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        run: gcloud -v
 
       - name: Set project
         run: gcloud config set project ${{ secrets.GCP_PROJECT_ID }}

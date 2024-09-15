@@ -25,7 +25,10 @@ jobs:
         uses: google-github-actions/auth@v2
         with: 
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          
+      
+      - name: auth GAR
+        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
+
       - name: info
         run: gcloud info
 

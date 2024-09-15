@@ -45,12 +45,6 @@
 #         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
 
 
-name: deploy dbt
-
-on:
-  push:
-    branches:
-      - main
 
 name: deploy dbt
 

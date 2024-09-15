@@ -73,8 +73,8 @@ jobs:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Authenticate to GAR
-        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
+      # - name: Authenticate to GAR
+      #   run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
       - name: confirm gcp
         run: gcloud info
       - name: confirm list

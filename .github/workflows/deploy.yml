@@ -22,9 +22,9 @@ jobs:
 
       - name: Authenticate to Google Cloud
         run: | 
-             echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > "${{ github.workspace }}/gcloud-key.json"
-             gcloud auth activate-service-account --key-file="${{ github.workspace }}/gcloud-key.json"
-             gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+             echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} > ${{ github.workspace }}/gcloud-key.json
+             gcloud auth activate-service-account --key-file=${{ github.workspace }}/gcloud-key.json
+             gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
 
       - name: build Docker image to GAR
         run: docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest .

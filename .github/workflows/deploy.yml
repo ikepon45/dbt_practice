@@ -17,7 +17,7 @@ jobs:
       - name: auth Google Cloud
         uses: google-github-actions/auth@v2
         with: 
-          service_account: 'github-actions@udemy-sql-381210.iam.gserviceaccount.com'
+          credentials_json: ${{ GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2

@@ -1,3 +1,4 @@
+gcloud auth list
 # パッケージ間の依存関係を整理
 dbt deps
 

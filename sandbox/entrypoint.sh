@@ -11,7 +11,7 @@ dbt docs generate
 edr report
 
 # サービスアカウントでGoogle Cloudにログイン
-gcloud auth login github-actions@udemy-sql-381210.iam.gserviceaccount.com
+gcloud auth activate-service-account github-actions@udemy-sql-381210.iam.gserviceaccount.com --key-file=service-account-key.json
 
 # GCSバケットにデプロイ
 gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/

@@ -8,7 +8,7 @@ on:
 jobs:
   deploy-dbt:
     runs-on: ubuntu-latest
-    defaults:
+    # defaults:
       # run:
       #   working-directory: ./sandbox
     steps:

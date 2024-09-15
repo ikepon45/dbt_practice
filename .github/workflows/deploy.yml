@@ -20,7 +20,7 @@ jobs:
         with:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Authenticate to GAR
         run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev -q

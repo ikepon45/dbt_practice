@@ -28,5 +28,8 @@ ENV PATH="/usr/local/google-cloud-sdk/bin:${PATH}"
 # dbt_profiles.ymlのパスを変更する
 ENV DBT_PROFILES_DIR="/app"
 
+# entrypoint.shの実行権限を付与
+RUN chmod +x /app/entrypoint.sh
+
 # コンテナ起動時にデフォルトで実行されるコマンド
-ENTRYPOINT /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]

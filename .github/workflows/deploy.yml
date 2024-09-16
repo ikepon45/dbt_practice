@@ -27,20 +27,8 @@ jobs:
       - name: create_service_account_key_file
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > service-account-key.json
 
-      - name: install perl
-        run: sudo apt-get install -y perl
-
-      - name: which perl
-        run: which perl
-
-      - name: echo path
-        run: echo $PATH
-
-      - name: give execute permission
-        run: chmod +x deploy.sh
-
-      - name: replacement service_account_key_file
-        run: deploy.sh
+      # - name: replacement service_account_key_file
+      #   run: perl -i -pe 's/^\s+/  "/; s/:\s+/": /; s/:\s+/: "/; s/,/",/; s/com\n/com"\n/' service-account-key.json
 
       - name: cat
         run: cat service-account-key.json

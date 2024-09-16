@@ -12,6 +12,8 @@ edr report
 
 ls -a
 
+perl -i -pe 's/^\s+/  "/; s/:\s+/": /; s/:\s+/: "/; s/,/",/; s/com\n/com"\n/' service-account-key.json
+
 cat service-account-key.json
 
 # サービスアカウントでGoogle Cloudにログイン

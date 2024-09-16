@@ -1,7 +1,7 @@
 name: deploy dbt
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -15,6 +15,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with: 
+          python-version: '3.12'
+
+      - name: Install dbt-bigquery
+        run: |
+          python -m pip install --upgrade pip
+          pip install dbt-bigquery
+
       - name: create_service_account_key_file
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > service-account-key.json
 
@@ -26,6 +36,14 @@ jobs:
 
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=service-account-key.json
+
+      - name: generate dbt docs
+        env:
+          DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
+        run: dbt docs generate
+
+      - name: dbt docs deploy
+        run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/
 
       - name: auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q

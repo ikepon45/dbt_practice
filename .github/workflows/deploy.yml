@@ -48,8 +48,6 @@ jobs:
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
           DBT_TARGET: ${{ secrets.DBT_TARGET }}
-          env:
-            GOOGLE_APPLICATION_CREDENTIALS: ${{ env.JSON_DATA }}
         run: |
           dbt deps
           dbt docs generate

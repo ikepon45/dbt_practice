@@ -37,7 +37,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           version: 'latest'
-          service_account_key: ${{ env.JSON_DATA }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
 
@@ -48,6 +47,7 @@ jobs:
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
           DBT_TARGET: ${{ secrets.DBT_TARGET }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.JSON_DATA }}
         run: |
           dbt deps
           dbt docs generate

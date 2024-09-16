@@ -1,4 +1,4 @@
-# パッケージ間の依存関係を整理
+# パッケージ間の依存関係を整理（elementaryをインストールしたため、elementaryと依存関係にあるパッケージをインストールする必要がある）
 dbt deps
 
 # テスト実施とモデル構築
@@ -11,7 +11,7 @@ dbt docs generate
 edr report
 
 # サービスアカウントでGoogle Cloudにログイン
-gcloud auth activate-service-account github-actions@udemy-sql-381210.iam.gserviceaccount.com --key-file=service-account-key.json
+# gcloud auth activate-service-account github-actions@udemy-sql-381210.iam.gserviceaccount.com --key-file=service-account-key.json
 
 # GCSバケットにデプロイ
 gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/

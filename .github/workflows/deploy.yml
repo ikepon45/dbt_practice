@@ -40,6 +40,7 @@ jobs:
       - name: generate dbt docs
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
+          DBT_TARGET: ${{ secrets.DBT_TARGET }}
         run: |
           dbt deps
           dbt docs generate

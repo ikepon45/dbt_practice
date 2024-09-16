@@ -1,11 +1,7 @@
 name: deploy dbt
 
-# on:
-#   pull_request:
-#     branches:
-#       - main
 on:
-  push:
+  pull_request:
     branches:
       - main
 

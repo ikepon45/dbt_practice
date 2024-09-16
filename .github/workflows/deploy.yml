@@ -27,6 +27,9 @@ jobs:
       - name: create_service_account_key_file
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > service-account-key.json
 
+      - name: give execute permission
+        run: chmod +x /../.github/workflows/deploy.sh
+
       - name: replacement service_account_key_file
         run: /../.github/workflows/deploy.sh
 

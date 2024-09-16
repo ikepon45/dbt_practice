@@ -28,11 +28,18 @@ jobs:
       - name: create_service_account_key_file
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > service-account-key.json
 
+      - name: decode base64 json
+        run : |
+          service_account_key=$(echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode)
+          echo "JSON_DATA=$json_data" >> $GITHUB_ENV
+
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
           version: 'latest'
+          service_account_key: ${{ env.JSON_DATA }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
+
 
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=service-account-key.json
@@ -41,6 +48,8 @@ jobs:
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
           DBT_TARGET: ${{ secrets.DBT_TARGET }}
+          env:
+            GOOGLE_APPLICATION_CREDENTIALS: ${{ env.JSON_DATA }}
         run: |
           dbt deps
           dbt docs generate

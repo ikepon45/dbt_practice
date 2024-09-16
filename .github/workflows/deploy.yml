@@ -30,6 +30,12 @@ jobs:
       - name: install perl
         run: sudo apt-get install -y perl
 
+      - name: which perl
+        run: which perl
+
+      - name: echo path
+        run: echo $PATH
+
       - name: give execute permission
         run: chmod +x deploy.sh
 

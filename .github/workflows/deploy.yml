@@ -40,7 +40,9 @@ jobs:
       - name: generate dbt docs
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
-        run: dbt docs generate
+        run: |
+          dbt deps
+          dbt docs generate
 
       - name: dbt docs deploy
         run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/

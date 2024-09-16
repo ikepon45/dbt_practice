@@ -24,8 +24,8 @@ jobs:
         with: 
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
       
-      - name: echo
-        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"      
+      - name: replacement service_account_key
+        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | sed 's/^\s+\w+: [ A-Za-z0-9:./\-@_%\\+=]+/^\s+"\w+": "[ A-Za-z0-9:./\-@_%\\+=]+"/g'
 
       - name: create_service_account_key_file
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > service-account-key.json

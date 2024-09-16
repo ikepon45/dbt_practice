@@ -30,8 +30,8 @@ jobs:
       # - name: replacement service_account_key_file
       #   run: perl -i -pe 's/^\s+/  "/; s/:\s+/": /; s/:\s+/: "/; s/,/",/; s/com\n/com"\n/' service-account-key.json
 
-      - name: cat
-        run: cat service-account-key.json
+      - name: list
+        run: ls -a
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2

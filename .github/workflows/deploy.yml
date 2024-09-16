@@ -28,7 +28,7 @@ jobs:
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > service-account-key.json
 
       - name: replacement service_account_key_file
-        run: ../.github/workflows/deploy.sh
+        run: /../.github/workflows/deploy.sh
 
       - name: cat
         run: cat service-account-key.json

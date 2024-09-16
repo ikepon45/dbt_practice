@@ -1,7 +1,11 @@
 name: deploy dbt
 
+# on:
+#   pull_request:
+#     branches:
+#       - main
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -24,7 +28,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: create_service_account_key_file
-        run: echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} | jq '.' > service-account-key.json
+        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | jq '.' > service-account-key.json
 
       - name: cat
         run: cat service-account-key.json

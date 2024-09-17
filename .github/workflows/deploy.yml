@@ -31,13 +31,13 @@ jobs:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: create_service_account_key_file
+      - name: Create service-account-key-file
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > service-account-key.json
 
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=service-account-key.json
 
-      - name: generate dbt docs
+      - name: Generate dbt docs
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
           GOOGLE_APPLICATION_CREDENTIALS: service-account-key.json
@@ -45,20 +45,20 @@ jobs:
           dbt deps
           dbt docs generate
 
-      - name: dbt docs deploy
+      - name: Deploy dbt docs
         run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/
 
-      - name: auth GAR
+      - name: Auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
-      - name: build Docker image to GAR
+      - name: Build docker-image to GAR
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest .
 
-      - name: push Docker image
+      - name: Push docker-image
         run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest
 
-      - name: deploy Cloud Run Jobs
+      - name: Deploy dbt to Cloud Run Jobs
         run: gcloud run jobs deploy dbt --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image --region=${{ secrets.GCP_REGION }} --tasks=1 --cpu=1 --max-retries=0 --memory=512Mi --parallelism=1 --task-timeout=600 --region ${{ secrets.GCP_REGION }}
 
-      - name: execute Cloud Run Jobs
+      - name: Execute Cloud Run Jobs
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}

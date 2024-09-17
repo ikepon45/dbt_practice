@@ -33,11 +33,15 @@ models:
   sandbox:
     # Config indicated by + and applies to all files under models/example/
     stg_test:
+      tags:
+        - 'stg'
+        - 'test'
       +schema: 'stg_test'
       +materialized: 'table'
       +dbt-osmosis: "{model}.yml"
       +labels:
         billing: 'test'
+      # enabled: false
   elementary:
     ## elementary models will be created in the schema '<your_schema>_elementary'
     +schema: "elementary"

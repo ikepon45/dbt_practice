@@ -10,7 +10,6 @@ sandbox:
       project: udemy-sql-381210
       threads: 1
       type: bigquery
-      keyfile: service-account-key.json
   target: dev
 elementary:
   outputs:

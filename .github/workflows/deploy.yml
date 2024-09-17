@@ -1,12 +1,12 @@
 name: deploy dbt
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [closed]
 
 jobs:
-  deploy-dbt:
+  deploy-dbt-to-stg:
+    if: ${{ github.event.pull_request.base.ref == 'main' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,13 +29,14 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           version: 'latest'
+          project_id: ${{ secrets.GCP_PROJECT_ID_STG }}
 
       - name: Create service-account-key-file
-        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > service-account-key.json
+        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY_STG }}" | base64 -d > service-account-key.json
 
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=service-account-key.json
-
+      
       - name: Generate dbt docs
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
@@ -51,13 +52,76 @@ jobs:
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
       - name: Build docker-image to GAR
-        run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest .
+        run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image:latest .
 
       - name: Push docker-image
-        run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image:latest
+        run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image:latest
 
       - name: Deploy dbt to Cloud Run Jobs
-        run: gcloud run jobs deploy dbt --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dbt/dbt-image --region=${{ secrets.GCP_REGION }} --tasks=1 --cpu=1 --max-retries=0 --memory=512Mi --parallelism=1 --task-timeout=600 --region ${{ secrets.GCP_REGION }}
+        run: gcloud run jobs deploy dbt --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image --region=${{ secrets.GCP_REGION }} --tasks=1 --cpu=1 --max-retries=0 --memory=512Mi --parallelism=1 --task-timeout=600 --region ${{ secrets.GCP_REGION }}
+
+      - name: Execute Cloud Run Jobs
+        run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
+  
+  deploy-dbt-to-prod:
+    if: ${{ github.event.pull_request.base.ref == 'prod' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sandbox
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with: 
+          python-version: '3.12'
+
+      - name: Install dbt-bigquery
+        run: |
+          python -m pip install --upgrade pip
+          pip install dbt-bigquery
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: 'latest'
+          project_id: ${{ secrets.GCP_PROJECT_ID_PROD }}
+
+      - name: Create service-account-key-file prod
+        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY_PROD }}" | base64 -d > service-account-key.json
+
+      - name: Authenticate to Google Cloud
+        run: gcloud auth activate-service-account --key-file=service-account-key.json
+      
+      - name: dbt target cheange dev to prod
+        run: sed -i 's/dev/prod/' profiles.yml
+
+      - name: Generate dbt docs
+        env:
+          DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
+          GOOGLE_APPLICATION_CREDENTIALS: service-account-key.json
+        run: |
+          dbt deps
+          dbt docs generate
+
+      - name: Deploy dbt docs
+        if: ${{ github.event.pull_request.base.ref == 'prod' }}
+        run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/
+
+      - name: Auth GAR
+        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
+
+      - name: Build docker-image to GAR
+        if: ${{ github.event.pull_request.base.ref == 'prod' }}
+        run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image:latest .
+
+      - name: Push docker-image
+        run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image:latest
+
+      - name: Deploy dbt to Cloud Run Jobs
+        run: gcloud run jobs deploy dbt --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image --region=${{ secrets.GCP_REGION }} --tasks=1 --cpu=1 --max-retries=0 --memory=512Mi --parallelism=1 --task-timeout=600 --region ${{ secrets.GCP_REGION }}      
 
       - name: Execute Cloud Run Jobs
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}

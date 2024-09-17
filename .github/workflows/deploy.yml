@@ -25,14 +25,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install dbt-bigquery
 
-      - name: create_service_account_key_file
-        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > service-account-key.json
-
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: create_service_account_key_file
+        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > service-account-key.json
 
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=service-account-key.json
@@ -40,7 +40,6 @@ jobs:
       - name: generate dbt docs
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
-          DBT_TARGET: ${{ secrets.DBT_TARGET }}
           GOOGLE_APPLICATION_CREDENTIALS: service-account-key.json
         run: |
           dbt deps

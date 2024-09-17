@@ -1,12 +1,12 @@
-name: deploy dbt
+name: Deploy dbt
 
 on:
   pull_request:
-    types: [closed]
+    types: [closed, opened]
 
 jobs:
   deploy-dbt-to-stg:
-    if: ${{ github.event.pull_request.base.ref == 'main' }}
+    if: ${{ (github.event.pull_request.base.ref == 'main' && github.event.action == 'closed') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -64,7 +64,7 @@ jobs:
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
   
   deploy-dbt-to-prod:
-    if: ${{ github.event.pull_request.base.ref == 'prod' }}
+    if: ${{ (github.event.pull_request.base.ref == 'prod' && github.event.action == 'opened') }}
     runs-on: ubuntu-latest
     defaults:
       run:

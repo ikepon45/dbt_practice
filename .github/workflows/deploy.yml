@@ -98,6 +98,9 @@ jobs:
       - name: dbt target cheange dev to prod
         run: sed -i 's/dev/prod/' profiles.yml
 
+      - name: cat
+        run: cat profiles.yml
+
       - name: Generate dbt docs
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}

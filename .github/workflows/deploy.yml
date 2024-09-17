@@ -34,8 +34,8 @@ jobs:
       - name: create_service_account_key_file
         run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > service-account-key.json
 
-      - name: Authenticate to Google Cloud
-        run: gcloud auth activate-service-account --key-file=service-account-key.json
+      # - name: Authenticate to Google Cloud
+      #   run: gcloud auth activate-service-account --key-file=service-account-key.json
 
       - name: generate dbt docs
         env:

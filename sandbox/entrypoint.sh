@@ -11,9 +11,9 @@ edr report
 gcloud auth activate-service-account --key-file=service-account-key.json
 
 if grep -q "target: prod" profiles.yml; then
-    # テスト結果のレポートをGCSバケットにデプロイ
+    # テスト結果のレポートを検証環境のGCSバケットにデプロイ
     gsutil -m cp -r edr_target/* gs://dbt_documents_shingo_ikeda/elementary_report/
 else
-    # テスト結果のレポートをGCSバケットにデプロイ
+    # テスト結果のレポートを検証環境のGCSバケットにデプロイ
     gsutil -m cp -r edr_target/* gs://dbt_documents_shingo_ikeda_prod/elementary_report/
 fi

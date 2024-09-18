@@ -2,11 +2,13 @@ name: Deploy dbt
 
 on:
   pull_request:
-    types: [closed, opened]
+    branches:
+      - 'deploy/*'
+    types: [synchronize, closed]
 
 jobs:
   deploy-dbt-to-stg:
-    if: ${{ (github.event.pull_request.base.ref == 'main' && github.event.action == 'closed') }}
+    if: ${{ (github.event.pull_request.base.ref == 'deploy/stg' && github.event.action == 'closed') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -96,7 +98,8 @@ jobs:
         run: gcloud auth activate-service-account --key-file=service-account-key.json
       
       - name: dbt target cheange dev to prod
-        run: sed -i 's/dev/prod/' profiles.yml
+        run: |
+          sed -i 's/target: dev/target: prod/g' profiles.yml
 
       - name: Generate dbt docs
         env:
@@ -108,7 +111,7 @@ jobs:
 
       - name: Deploy dbt docs
         if: ${{ github.event.pull_request.base.ref == 'prod' }}
-        run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/
+        run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda_prod/dbt_docs/
 
       - name: Auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q

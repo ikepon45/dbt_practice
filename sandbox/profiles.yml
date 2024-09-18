@@ -10,12 +10,29 @@ sandbox:
       project: udemy-sql-381210
       threads: 1
       type: bigquery
+    prod:
+      dataset: sandboxa
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      location: US
+      method: oauth
+      priority: interactive
+      project: sql-book-4050
+      threads: 1
+      type: bigquery
   target: dev
 elementary:
   outputs:
-    default:
+    dev:
       type: "bigquery"
       project: "udemy-sql-381210"
       dataset: "elementary"
       method: oauth
       threads: 1
+    prod:
+      type: "bigquery"
+      project: "sql-book-4050"
+      dataset: "elementary"
+      method: oauth
+      threads: 1
+  target: dev

@@ -66,7 +66,7 @@ jobs:
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
   
   deploy-dbt-to-prod:
-    if: ${{ (github.event.pull_request.base.ref == 'prod' && github.event.action == 'opened') }}
+    if: ${{ (github.event.pull_request.base.ref == 'deploy/prod' && github.event.action == 'closed') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -113,14 +113,12 @@ jobs:
           dbt docs generate
 
       - name: Deploy dbt docs
-        if: ${{ github.event.pull_request.base.ref == 'prod' }}
         run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda_prod/dbt_docs/
 
       - name: Auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
       - name: Build docker-image to GAR
-        if: ${{ github.event.pull_request.base.ref == 'prod' }}
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image:latest .
 
       - name: Push docker-image

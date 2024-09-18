@@ -45,6 +45,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: service-account-key.json
         run: |
           dbt deps
+          dbt run
           dbt docs generate
 
       - name: Deploy dbt docs
@@ -110,6 +111,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: service-account-key.json
         run: |
           dbt deps
+          dbt run
           dbt docs generate
 
       - name: Deploy dbt docs

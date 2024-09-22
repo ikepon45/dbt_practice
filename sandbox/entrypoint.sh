@@ -12,8 +12,8 @@ gcloud auth activate-service-account --key-file=service-account-key.json
 
 if grep -q "target: dev" profiles.yml; then
     # テスト結果のレポートを検証環境のGCSバケットにデプロイ
-    gsutil -m cp -r edr_target/* gs://dbt_documents_shingo_ikeda/elementary_report/
+    gsutil -m cp -r edr_target/elementary_report.html gs://dbt_documents_shingo_ikeda/elementary_report/
 else
-    # テスト結果のレポートを検証環境のGCSバケットにデプロイ
-    gsutil -m cp -r edr_target/* gs://dbt_documents_shingo_ikeda_prod/elementary_report/
+    # テスト結果のレポートを本番環境のGCSバケットにデプロイ
+    gsutil -m cp -r edr_target/elementary_report.html gs://dbt_documents_shingo_ikeda_prod/elementary_report/
 fi

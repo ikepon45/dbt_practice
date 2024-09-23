@@ -1,6 +1,8 @@
 version: 2
 models:
   - name: stg_test_table
+    tests:
+      - elementary.schema_changes
     columns:
       - name: id
         description: 'id'

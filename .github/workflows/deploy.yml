@@ -4,11 +4,11 @@ on:
   pull_request:
     branches:
       - 'deploy/*'
-    types: [synchronize, closed]
+    types: [opened, synchronize, closed]
 
 jobs:
   deploy-dbt-to-stg:
-    if: ${{ (github.event.pull_request.base.ref == 'deploy/stg') && (github.event.action == 'synchronize') || (github.event.action == 'closed') }}
+    if: ${{ (github.event.pull_request.base.ref == 'deploy/stg') && (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'closed') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -67,7 +67,7 @@ jobs:
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
   
   deploy-dbt-to-prod:
-    if: ${{ (github.event.pull_request.base.ref == 'deploy/prod') && (github.event.action == 'synchronize') || (github.event.action == 'closed') }}
+    if: ${{ (github.event.pull_request.base.ref == 'deploy/prod') && (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'closed') }}
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -54,11 +54,11 @@ jobs:
       - name: Auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
-      - name: Create repository
-        run: gcloud artifacts repositories create dbt --repository-format=docker --location=${{ secrets.GCP_REGION }} --description="store dbt-image" --oauth-service-account-email="${{ secrets.GCP_SERVICE_ACCOUNT_STG }}"
-
       - name: Build docker-image
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image:latest .
+
+      - name: Create repository
+        run: gcloud artifacts repositories create dbt --repository-format=docker --location=${{ secrets.GCP_REGION }} --description="store dbt-image"
 
       - name: Push docker-image to GAR
         run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image:latest
@@ -123,11 +123,11 @@ jobs:
       - name: Auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
-      - name: Create repository
-        run: gcloud artifacts repositories create dbt --repository-format=docker --location=${{ secrets.GCP_REGION }} --description="store dbt-image" --oauth-service-account-email="${{ secrets.GCP_SERVICE_ACCOUNT_PROD }}"
-
       - name: Build docker-image
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image:latest .
+
+      - name: Create repository
+        run: gcloud artifacts repositories create dbt --repository-format=docker --location=${{ secrets.GCP_REGION }} --description="store dbt-image"
 
       - name: Push docker-image to GAR
         run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image:latest

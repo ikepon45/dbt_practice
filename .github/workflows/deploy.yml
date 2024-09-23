@@ -4,11 +4,11 @@ on:
   pull_request:
     branches:
       - 'deploy/*'
-    types: [opened, synchronize, closed]
+    types: [opened, synchronize]
 
 jobs:
   deploy-dbt-to-stg:
-    if: ${{ (github.event.pull_request.base.ref == 'deploy/stg') && (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'closed') }}
+    if: ${{ (github.event.pull_request.base.ref == 'deploy/stg') && (github.event.action == 'opened' || github.event.action == 'synchronize') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -65,9 +65,12 @@ jobs:
 
       - name: Execute Cloud Run Jobs
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
+
+      - name: Set up Cloud Scheduler
+        run: gcloud scheduler jobs create http dbt --location asia-northeast1 --schedule="0 6 * * *" --uri="https://${{ secrets.GCP_REGION }}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT_ID_STG }}/jobs/dbt:run" --http-method POST
   
   deploy-dbt-to-prod:
-    if: ${{ (github.event.pull_request.base.ref == 'deploy/prod') && (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'closed') }}
+    if: ${{ (github.event.pull_request.base.ref == 'deploy/prod') && (github.event.action == 'opened' || github.event.action == 'synchronize') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -131,3 +134,6 @@ jobs:
 
       - name: Execute Cloud Run Jobs
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
+
+      - name: Set up Cloud Scheduler
+        run: gcloud scheduler jobs create http dbt --location asia-northeast1 --schedule="0 6 * * *" --uri="https://${{ secrets.GCP_REGION }}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT_ID_STG }}/jobs/dbt:run" --http-method POST

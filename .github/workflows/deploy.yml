@@ -51,8 +51,8 @@ jobs:
       - name: Deploy dbt docs
         run: gsutil -m cp -r target/* gs://dbt_documents_shingo_ikeda/dbt_docs/
 
-      # - name: Auth GAR
-      #   run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
+      - name: Auth GAR
+        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
       - name: Build docker-image
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image:latest .

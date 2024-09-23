@@ -54,10 +54,13 @@ jobs:
       - name: Auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
-      - name: Build docker-image to GAR
+      - name: Create repository
+        run: gcloud artifacts repositories create dbt --repository-format=docker --location=${{ secrets.GCP_REGION }} --description="store dbt-image"
+
+      - name: Build docker-image
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image:latest .
 
-      - name: Push docker-image
+      - name: Push docker-image to GAR
         run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_STG }}/dbt/dbt-image:latest
 
       - name: Deploy dbt to Cloud Run Jobs
@@ -105,9 +108,6 @@ jobs:
         run: |
           sed -i 's/target: dev/target: prod/g' profiles.yml
 
-      - name: cat
-        run: cat profiles.yml
-
       - name: Generate dbt docs
         env:
           DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
@@ -123,10 +123,13 @@ jobs:
       - name: Auth GAR
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev -q
 
-      - name: Build docker-image to GAR
+      - name: Create repository
+        run: gcloud artifacts repositories create dbt --repository-format=docker --location=${{ secrets.GCP_REGION }} --description="store dbt-image"
+
+      - name: Build docker-image
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image:latest .
 
-      - name: Push docker-image
+      - name: Push docker-image to GAR
         run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PROD }}/dbt/dbt-image:latest
 
       - name: Deploy dbt to Cloud Run Jobs

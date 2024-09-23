@@ -67,7 +67,7 @@ jobs:
         run: gcloud run jobs execute dbt --region=${{ secrets.GCP_REGION }}
 
       - name: Set up Cloud Scheduler
-        run: gcloud scheduler jobs create http dbt --location asia-northeast1 --schedule="0 6 * * *" --uri="https://${{ secrets.GCP_REGION }}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT_ID_STG }}/jobs/dbt:run" --http-method POST
+        run: gcloud scheduler jobs create http dbt --location asia-northeast1 --schedule="0 9 * * *" --uri="https://${{ secrets.GCP_REGION }}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT_ID_STG }}/jobs/dbt:run" --http-method POST
   
   deploy-dbt-to-prod:
     if: ${{ (github.event.pull_request.base.ref == 'deploy/prod') && (github.event.action == 'opened' || github.event.action == 'synchronize') }}

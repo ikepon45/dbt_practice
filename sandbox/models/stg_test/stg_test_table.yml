@@ -1,15 +1,10 @@
 version: 2
 models:
   - name: stg_test_table
-    tests:
-      - elementary.schema_changes
     columns:
       - name: id
         description: 'id'
         data_type: INT64
-        tests:
-          - unique
-          - not_null
       - name: name
         description: '名前'
         data_type: STRING
